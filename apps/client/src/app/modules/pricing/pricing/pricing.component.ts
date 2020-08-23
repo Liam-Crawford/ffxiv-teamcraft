@@ -120,7 +120,7 @@ export class PricingComponent implements AfterViewInit {
     const rowsToFill = rows
       .filter(row => {
         const price = this.pricingService.getPrice(row);
-        return !price.fromVendor || finalItems;
+        return this.lazyData.data.marketItems.indexOf(row.id) > -1 && !price.fromVendor || finalItems;
       });
     if (rowsToFill.length === 0) {
       return;
@@ -226,12 +226,12 @@ export class PricingComponent implements AfterViewInit {
         const amount = this.pricingService.getAmount(list.$key, row, false);
         let priceString: string;
         if (price.hq > 0 && amount.hq > 0) {
-          priceString = `${price.hq.toLocaleString()}gil x${amount.hq}(HQ) (${price.hqServer})`;
+          priceString = `${price.hq.toLocaleString()}gil x${amount.hq}(HQ) (${this.getWorldName(price.hqServer)})`;
           if (price.nq > 0 || amount.nq > 0) {
-            priceString += `, ${price.nq.toLocaleString()}gil x${amount.nq}(NQ) (${price.nqServer})`;
+            priceString += `, ${price.nq.toLocaleString()}gil x${amount.nq}(NQ) (${this.getWorldName(price.nqServer)})`;
           }
         } else {
-          priceString = `${price.nq}gil x${amount.nq}(NQ) (${price.nqServer})`;
+          priceString = `${price.nq}gil x${amount.nq}(NQ) (${this.getWorldName(price.nqServer)})`;
         }
         return `${total}\n ${this.i18n.getName(this.l12n.getItem(row.id))}: ${priceString}`;
       }, `${this.translate.instant('COMMON.Total')}: ${this.getTotalEarnings(rows, list).toLocaleString()}gil\n`);
@@ -358,5 +358,9 @@ export class PricingComponent implements AfterViewInit {
     setTimeout(() => {
       this.cd.detectChanges();
     }, 500);
+  }
+
+  private getWorldName(world: string): string {
+    return this.i18n.getName(this.l12n.getWorldName(world));
   }
 }

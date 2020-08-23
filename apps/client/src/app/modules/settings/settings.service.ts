@@ -52,6 +52,22 @@ export class SettingsService {
     this.setSetting('region:hide-banner', hide.toString());
   }
 
+  public get showOnlyCraftableInRecipeFinder(): boolean {
+    return this.getSetting('recipe-finder:only-craftable', 'false') === 'true';
+  }
+
+  public set showOnlyCraftableInRecipeFinder(show: boolean) {
+    this.setSetting('recipe-finder:only-craftable', show.toString());
+  }
+
+  public get showOnlyCollectablesInRecipeFinder(): boolean {
+    return this.getSetting('recipe-finder:only-collectables', 'false') === 'true';
+  }
+
+  public set showOnlyCollectablesInRecipeFinder(show: boolean) {
+    this.setSetting('recipe-finder:only-collectables', show.toString());
+  }
+
   public get configurationPanelExpanded(): boolean {
     return this.getSetting('simulation:configuration:expanded', 'true') === 'true';
   }
@@ -569,6 +585,14 @@ export class SettingsService {
 
   public set macroBreakBeforeByregot(breakBeforeByregot: boolean) {
     this.setSetting('macroBreakBeforeByregot', breakBeforeByregot.toString());
+  }
+
+  public setOverlayClockDisplay(overlay: string, show: boolean): void {
+    this.setSetting(`overlay:clock:${overlay}`, show.toString());
+  }
+
+  public getOverlayClockDisplay(overlay: string): boolean {
+    return this.getSetting(`overlay:clock:${overlay}`, 'true') === 'true';
   }
 
   private getSetting(name: string, defaultValue: string): string {
